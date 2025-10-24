@@ -1,0 +1,41 @@
+﻿@model EmployeeSkills.Models.ViewModels.AddEmployeeVM
+
+<form asp-controller="Employee" asp-action="Add" id="EmpForm" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title">Add Employee</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+    </div>
+    <div class="modal-body">
+        <div class="form-group mb-2">
+            <label asp-for="FirstName">First Name</label>
+            <input type="text" asp-for="FirstName" class="form-control" />
+            <span asp-validation-for="FirstName" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-2">
+            <label asp-for="LastName">Last Name</label>
+            <input type="text" asp-for="LastName" class="form-control" />
+            <span asp-validation-for="LastName" class="text-danger"></span>
+        </div>
+        <div class="form-group mb-2">
+            <label for="SelectedSkillIds">Skills</label>
+            <select asp-for="SelectedSkillIds"
+                    asp-items="Model.SkillItems"
+                    multiple="multiple"
+                    class="form-control">
+                    
+            </select>
+            <span asp-validation-for="SelectedSkillIds" class="text-danger"></span>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Save</button>
+    </div>
+
+</form>
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

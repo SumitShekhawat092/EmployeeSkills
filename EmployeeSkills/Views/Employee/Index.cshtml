@@ -1,0 +1,71 @@
+﻿@model IEnumerable<EmployeeSkills.Models.Entities.Employee>
+
+<div class="container mt-4">
+    <h2>Employee List</h2>
+    <button class="btn btn-success mb-3" id="btnAddEmployee">Add Employee</button>
+
+    <table class="table table-bordered" id="employeeTable">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Skills</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var emp in Model)
+            {
+                <tr>
+                    <td>@emp.FirstName @emp.LastName</td>
+                    <td>@string.Join(", ", emp.EmployeeSkills.Select(x => x.Skill.SkillName))</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<!-- Model -->
+<div class="modal fade" id="employeeModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" id="employeeModalContent">
+            
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Load partial page
+            $("#btnAddEmployee").click(function () {
+                $.ajax({
+                    url: '@Url.Action("Add", "Employee")',
+                    type: 'GET',
+                    success: function (result) {
+                        $("#employeeModalContent").html(result);
+                        $("#employeeModal").modal('show');
+                    }
+                });
+            });
+
+            // submit partial page
+            $(document).on("submit", "#EmpForm", function (e) {
+                e.preventDefault();
+                $.ajax({
+                    url: $(this).attr("action"),
+                    type: $(this).attr("method"),
+                    data: $(this).serialize(),
+                    success: function (response) {
+                        if (response.success) {
+                            $("#employeeModal").modal('hide');
+                            location.reload();
+                        } else {
+                            $("#employeeModalContent").html(response);
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}
